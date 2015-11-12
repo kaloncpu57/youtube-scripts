@@ -100,8 +100,18 @@ function loopbar() {
         "class": "ytp-scrubber-button loop-end",
         "style": "border-top-left-radius: 0px;border-bottom-left-radius: 0px;right: -6px;"
     });
+    leftend.addEventListener("mousedown", function () {
+        window.addEventListener("mousemove", loopendDrag);
+    });
+    window.addEventListener("mouseup", function () {
+        window.removeEventListener("mousemove", loopendDrag);
+    });
     loopbar.appendChild(leftend);
     loopbar.appendChild(rightend);
+}
+
+function loopendDrag() {
+    console.log("Dragging loop end!");
 }
 addLoop();
 loopbar();
