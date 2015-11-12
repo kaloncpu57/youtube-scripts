@@ -2,6 +2,7 @@
 // @name         YouTube Loop
 // @namespace    kaloncpu57
 // @version      0.8
+// @updateURL    https://raw.githubusercontent.com/kaloncpu57/youtube-scripts/master/loop.js
 // @description  Adds a loop option to the YouTube HTML5 player settings
 // @author       kaloncpu57
 // @match        http*://www.youtube.com/watch?*
