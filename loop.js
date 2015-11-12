@@ -5,7 +5,7 @@
 // @updateURL    https://raw.githubusercontent.com/kaloncpu57/youtube-scripts/master/loop.js
 // @description  Adds a loop option to the YouTube HTML5 player settings
 // @author       kaloncpu57
-// @match        http*://www.youtube.com/watch?*
+// @match        http*://www.youtube.com/*
 // @grant        none
 // ==/UserScript==
 
@@ -80,6 +80,9 @@ function addLoop() {
 }
 
 function loopbar() {
+    if (document.querySelector(".loop-bar")) {
+        return false;
+    }
     var style = document.createElement("style");
     style.innerText = ".loop-end {height: 13px;width: 5px;background-color: #00D0DA; cursor: pointer; top: -5px;display: none;}";
     document.head.appendChild(style);
@@ -109,13 +112,15 @@ function loopbar() {
     });
     loopbar.appendChild(leftend);
     loopbar.appendChild(rightend);
+    var rect = loopbar.getBoundingClientRect();
 }
 
 function loopendDrag() {
     console.log("Dragging loop end!");
 }
-addLoop();
-loopbar();
+
+//addLoop();
+//loopbar();
 
 document.body.addEventListener("transitionend", function (e) {
     //console.log(e.target);
@@ -123,13 +128,17 @@ document.body.addEventListener("transitionend", function (e) {
         return false;
     }
     addLoop();
+    loopbar();
 });
 
+/*
 var observer = new MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {
         if (mutation.attributeName == "src") {
             addLoop();
+            loopbar();
         }
     });
 });
 observer.observe(document.querySelector("#movie_player").querySelector("video"), {attributes: true});
+*/
