@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Loop
 // @namespace    kaloncpu57
-// @version      0.7
+// @version      0.8
 // @description  Adds a loop option to the YouTube HTML5 player settings
 // @author       kaloncpu57
 // @match        http*://www.youtube.com/watch?*
@@ -19,6 +19,19 @@ Element.prototype.setAttributes = function (attrs) {
         }
     }
 };
+
+Element.prototype.hasClass = function (str) {
+    var attr = this.getAttribute("class");
+    if (typeof attr == "undefined" || attr == "" || attr == null) {
+        return false;
+    }
+    var classes = attr.split(" ");
+    if (classes.indexOf(str) != -1) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 function createMenuItem(/*type, */label, ariaChecked, func) {
     /*
@@ -50,22 +63,57 @@ function createMenuItem(/*type, */label, ariaChecked, func) {
 function addLoop() {
     createMenuItem("Loop", document.querySelector("#player-api").querySelector("video").loop?"true":"false", function () {
         var vid = document.querySelector("#movie_player").querySelector("video");
+        var loopends = document.querySelectorAll(".loop-end");
         if (this.getAttribute("aria-checked") == "true") {
             vid.loop = true;
+            for (var i = 0; i < loopends.length; i++) {
+                loopends[i].style.display = "block";
+            }
         } else {
             vid.loop = false;
+            for (var i = 0; i < loopends.length; i++) {
+                loopends[i].style.display = "none";
+            }
         }
     });
 }
 
+function loopbar() {
+    var style = document.createElement("style");
+    style.innerText = ".loop-end {height: 13px;width: 5px;background-color: #00D0DA; cursor: pointer; top: -5px;display: none;}";
+    document.head.appendChild(style);
+    var loopbar = document.createElement("div"),
+        progressbar = document.querySelector(".ytp-progress-bar-container"),
+        parent = progressbar.parentElement;
+    loopbar.setAttributes({
+        "class": "loop-bar"
+    });
+    parent.replaceChild(loopbar, progressbar);
+    loopbar.appendChild(progressbar);
+    var leftend = document.createElement("div"),
+        rightend = document.createElement("div");
+    leftend.setAttributes({
+        "class": "ytp-scrubber-button loop-end",
+        "style": "border-top-right-radius: 0px;border-bottom-right-radius: 0px;left: 1px;"
+    });
+    rightend.setAttributes({
+        "class": "ytp-scrubber-button loop-end",
+        "style": "border-top-left-radius: 0px;border-bottom-left-radius: 0px;right: -6px;"
+    });
+    loopbar.appendChild(leftend);
+    loopbar.appendChild(rightend);
+}
 addLoop();
+loopbar();
+
 document.body.addEventListener("transitionend", function (e) {
     //console.log(e.target);
-    if (e.target.getAttribute("class").indexOf("ytp-player-content") != -1) {
+    if (e.target.hasClass("ytp-player-content")) {
         return false;
     }
     addLoop();
 });
+
 var observer = new MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {
         if (mutation.attributeName == "src") {
