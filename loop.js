@@ -86,14 +86,15 @@ function loopbar() {
     var style = document.createElement("style");
     style.innerText = ".loop-end {height: 13px;width: 5px;background-color: #00D0DA; cursor: pointer; top: -5px;display: none;}";
     document.head.appendChild(style);
-    var loopbar = document.createElement("div"),
+    window.loopbar = {},
         progressbar = document.querySelector(".ytp-progress-bar-container"),
         parent = progressbar.parentElement;
-    loopbar.setAttributes({
+    loopbar.element = document.createElement("div");
+    loopbar.element.setAttributes({
         "class": "loop-bar"
     });
-    parent.replaceChild(loopbar, progressbar);
-    loopbar.appendChild(progressbar);
+    parent.replaceChild(loopbar.element, progressbar);
+    loopbar.element.appendChild(progressbar);
     var leftend = document.createElement("div"),
         rightend = document.createElement("div");
     leftend.setAttributes({
@@ -105,18 +106,25 @@ function loopbar() {
         "style": "border-top-left-radius: 0px;border-bottom-left-radius: 0px;right: -6px;"
     });
     leftend.addEventListener("mousedown", function () {
-        window.addEventListener("mousemove", loopendDrag);
-    });
+        loopbar.dragging = this;
+        window.addEventListener("mousemove", loopendDrag, true);
+    }, false);
     window.addEventListener("mouseup", function () {
-        window.removeEventListener("mousemove", loopendDrag);
-    });
-    loopbar.appendChild(leftend);
-    loopbar.appendChild(rightend);
-    var rect = loopbar.getBoundingClientRect();
+        window.removeEventListener("mousemove", loopendDrag, true);
+        loopbar.dragging = void(0);
+    }, false);
+    loopbar.element.appendChild(leftend);
+    loopbar.element.appendChild(rightend);
+    var rect = loopbar.element.getBoundingClientRect();
 }
 
-function loopendDrag() {
-    console.log("Dragging loop end!");
+function loopendDrag(e) {
+    if (!loopbar.dragging) {
+        return false;
+    }
+    console.log(e);
+    var left = parseInt(loopbar.dragging.style.left, 10);
+    loopbar.dragging.style.left = (left + e.movementX) + "px";
 }
 
 //addLoop();
