@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Loop
 // @namespace    kaloncpu57
-// @version      0.8
+// @version      0.85
 // @updateURL    https://raw.githubusercontent.com/kaloncpu57/youtube-scripts/master/loop.js
 // @description  Adds a loop option to the YouTube HTML5 player settings
 // @author       kaloncpu57
@@ -84,7 +84,7 @@ function loopbar() {
         return false;
     }
     var style = document.createElement("style");
-    style.innerText = ".loop-end {height: 13px;width: 5px;background-color: #00D0DA; cursor: pointer; top: -5px;display: none;}";
+    style.innerText = ".loop-end {height: 13px;width: 5px;background-color: #00D0DA;margin-left:-6.5px;border-radius: 6.5px;cursor: pointer;position: absolute;top: -5px;z-index: 45;display: none;}";
     document.head.appendChild(style);
     window.loopbar = {},
         progressbar = document.querySelector(".ytp-progress-bar-container"),
@@ -98,11 +98,11 @@ function loopbar() {
     var leftend = document.createElement("div"),
         rightend = document.createElement("div");
     leftend.setAttributes({
-        "class": "ytp-scrubber-button loop-end",
+        "class": "loop-end",
         "style": "border-top-right-radius: 0px;border-bottom-right-radius: 0px;left: 1px;"
     });
     rightend.setAttributes({
-        "class": "ytp-scrubber-button loop-end",
+        "class": "loop-end",
         "style": "border-top-left-radius: 0px;border-bottom-left-radius: 0px;right: -6px;"
     });
     leftend.addEventListener("mousedown", function () {
