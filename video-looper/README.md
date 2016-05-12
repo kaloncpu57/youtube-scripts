@@ -1,5 +1,6 @@
 # Video Looper
-This script adds the option to loop the current video in YouTube's video player settings. You can also use Ctrl-Alt-L to toggle the loop option.
++ This script adds the option to loop the current video in YouTube's video player settings.
++ You can also use Ctrl-Alt-L to toggle the loop option.
 
 ## Chrome Users
 Chrome users will have to install the [Tampermonkey extension](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en) in order to use this script.
