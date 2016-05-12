@@ -1,5 +1,5 @@
-# Username Color Cycler
-This script will change the color of your username in Twitch chat every time you post.
+# Video loopendDrag
+This script adds the option to loop the current video in YouTube's video player settins. You can also use Ctrl-Alt-L to toggle the loop option.
 
 ## Chrome Users
 Chrome users will have to install the [Tampermonkey extension](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en) in order to use this script.
