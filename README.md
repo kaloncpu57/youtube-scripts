@@ -1,2 +1,3 @@
-# youtube-scripts
-Adds features/settings to YouTube videos.
+# YouTube Scripts
+Add features and settings to YouTube
+Each script should have its own README file
