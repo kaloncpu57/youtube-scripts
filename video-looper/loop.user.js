@@ -41,14 +41,7 @@ function checkCtrlAlt(obj, ctrl, alt) {
   return true;
 }
 
-function createMenuItem(/*type, label, ariaChecked, func*/opt) {
-    /*
-    if (type == "checkbox") {
-        //
-    } else if (type == "popup") {
-        //
-    }
-    */
+function createMenuItem(opt) {
     var id = "custom-menu-item-" + opt.label.toLowerCase();
     if (!document.getElementById(id)) {
         var menuitem = document.createElement("div");
@@ -100,74 +93,9 @@ function addLoop() {
   );
 }
 
-function loopbar() {
-    if (document.querySelector(".loop-bar")) {
-        return false;
-    }
-    var style = document.createElement("style");
-    style.innerText = ".loop-end {height: 13px;width: 5px;background-color: #00D0DA;margin-left:-6.5px;border-radius: 6.5px;cursor: pointer;position: absolute;top: -5px;z-index: 45;display: none;}";
-    document.head.appendChild(style);
-    window.loopbar = {};
-    var progressbar = document.querySelector(".ytp-progress-bar-container"),
-        parent = progressbar.parentElement;
-    loopbar.element = document.createElement("div");
-    loopbar.element.setAttributes({
-        "class": "loop-bar"
-    });
-    parent.replaceChild(loopbar.element, progressbar);
-    loopbar.element.appendChild(progressbar);
-    var leftend = document.createElement("div"),
-        rightend = document.createElement("div");
-    leftend.setAttributes({
-        "class": "loop-end",
-        "style": "border-top-right-radius: 0px;border-bottom-right-radius: 0px;left: 1px;"
-    });
-    rightend.setAttributes({
-        "class": "loop-end",
-        "style": "border-top-left-radius: 0px;border-bottom-left-radius: 0px;right: -6px;"
-    });
-    leftend.addEventListener("mousedown", function () {
-        loopbar.dragging = this;
-        window.addEventListener("mousemove", loopendDrag, true);
-    }, false);
-    window.addEventListener("mouseup", function () {
-        window.removeEventListener("mousemove", loopendDrag, true);
-        loopbar.dragging = void(0);
-    }, false);
-    loopbar.element.appendChild(leftend);
-    loopbar.element.appendChild(rightend);
-    var rect = loopbar.element.getBoundingClientRect();
-}
-
-function loopendDrag(e) {
-    if (!loopbar.dragging) {
-        return false;
-    }
-    console.log(e);
-    var left = parseInt(loopbar.dragging.style.left, 10);
-    loopbar.dragging.style.left = (left + e.movementX) + "px";
-}
-
-//addLoop();
-//loopbar();
-
 document.body.addEventListener("transitionend", function (e) {
-    //console.log(e.target);
     if (e.target.hasClass("ytp-player-content")) {
         return false;
     }
     addLoop();
-    loopbar();
 });
-
-/*
-var observer = new MutationObserver(function (mutations) {
-    mutations.forEach(function (mutation) {
-        if (mutation.attributeName == "src") {
-            addLoop();
-            loopbar();
-        }
-    });
-});
-observer.observe(document.querySelector("#movie_player").querySelector("video"), {attributes: true});
-*/
