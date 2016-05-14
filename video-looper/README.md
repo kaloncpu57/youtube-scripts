@@ -1,5 +1,6 @@
 # Video Looper
 + This script adds the option to loop the current video in YouTube's video player settings.
++ 
 ![Loop Option](http://kaloncpu57.github.io/youtube-scripts/video-looper/visualize.PNG)
 + You can also use Ctrl-Alt-L to toggle the loop option.
 
