@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         YouTube Loop
 // @namespace    kaloncpu57
-// @version      0.8.7
-// @updateURL    http://kaloncpu57.github.io/youtube-scripts/video-looper/loop.user.js
+// @version      0.8.8
+// @updateURL    https://kaloncpu57.github.io/youtube-scripts/video-looper/loop.user.js
 // @description  Adds a loop option to the YouTube HTML5 player settings
 // @author       kaloncpu57
-// @match        http*://www.youtube.com/*
+// @match        http://www.youtube.com/*
+// @match        https://www.youtube.com/*
 // @grant        none
 // ==/UserScript==
 
