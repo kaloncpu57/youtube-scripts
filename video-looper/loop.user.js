@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         YouTube Loop
 // @namespace    kaloncpu57
-// @version      0.8.6
-// @updateURL    http://kaloncpu57.github.io/youtube-scripts/video-looper/loop.user.js
+// @version      0.8.8
+// @updateURL    https://kaloncpu57.github.io/youtube-scripts/video-looper/loop.user.js
 // @description  Adds a loop option to the YouTube HTML5 player settings
 // @author       kaloncpu57
-// @match        http*://www.youtube.com/*
+// @match        http://www.youtube.com/*
+// @match        https://www.youtube.com/*
 // @grant        none
 // ==/UserScript==
 
@@ -34,6 +35,33 @@ Element.prototype.hasClass = function (str) {
     }
 };
 
+function styleSheet() {
+  var style = document.createElement("style");
+  style.appendChild(document.createTextNode(""));
+  document.head.appendChild(style);
+  return style.sheet;
+}
+
+CSSStyleSheet.prototype.makeRule = function (selector, rules, index) {
+	if("insertRule" in sheet) {
+		sheet.insertRule(selector + "{" + rules + "}", index);
+	}
+	else if("addRule" in sheet) {
+		sheet.addRule(selector, rules, index);
+	}
+};
+
+var sheet = styleSheet();
+var notifier = document.createElement("div");
+notifier.setAttribute("class", "loop-notification");
+notifier.appendChild(document.createElement("span"));
+notifier.children[0].setAttribute("class", "yt-valign");
+notifier.children[0].appendChild(document.createElement("span"));
+notifier.children[0].children[0].id = "loop-notification-text";
+notifier.style.height = "0";
+document.querySelector("#yt-masthead").appendChild(notifier);
+sheet.makeRule(".loop-notification", "background: red;position: absolute;top: 50px;right: 30px;padding: 0 10px;color: white;font-weight: 500;transition: height 0.3s linear 0.1s;height: 30px;overflow: hidden;word-wrap: normal;white-space: nowrap;", 0);
+
 function checkCtrlAlt(obj, ctrl, alt) {
   if ((obj.ctrl && !ctrl) || (obj.alt && !alt) || (!obj.ctrl && ctrl) || (!obj.alt && alt)) {
     return false;
@@ -41,14 +69,7 @@ function checkCtrlAlt(obj, ctrl, alt) {
   return true;
 }
 
-function createMenuItem(/*type, label, ariaChecked, func*/opt) {
-    /*
-    if (type == "checkbox") {
-        //
-    } else if (type == "popup") {
-        //
-    }
-    */
+function createMenuItem(opt) {
     var id = "custom-menu-item-" + opt.label.toLowerCase();
     if (!document.getElementById(id)) {
         var menuitem = document.createElement("div");
@@ -68,6 +89,13 @@ function createMenuItem(/*type, label, ariaChecked, func*/opt) {
           window.addEventListener("keydown", function (e) {
             if (checkCtrlAlt(opt.hotkey, e.ctrlKey, e.altKey) && e.keyCode == opt.hotkey.keycode) {
               menuitem.click();
+              if (window.loopNotifyTimer) {
+                clearTimeout(window.loopNotifyTimer);
+              }
+              notifier.style.height = "0";
+              notifier.querySelector("#loop-notification-text").textContent = "Video Loop " + (document.querySelector("#movie_player").querySelector("video").loop?"On":"Off");
+              notifier.style.height = "30px";
+              window.loopNotifyTimer = setTimeout(function () {notifier.style.height = "0";}, 2000);
             }
           });
         }
@@ -79,7 +107,7 @@ function addLoop() {
     createMenuItem(
       {
         label: "Loop",
-        ariaChecked: document.querySelector("#player-api").querySelector("video").loop?"true":"false",
+        ariaChecked: document.querySelector("#movie_player").querySelector("video").loop?"true":"false",
         hotkey: {ctrl: true, alt: true, keycode: 76},
         func: function () {
           var vid = document.querySelector("#movie_player").querySelector("video");
@@ -148,26 +176,11 @@ function loopendDrag(e) {
     loopbar.dragging.style.left = (left + e.movementX) + "px";
 }
 
-//addLoop();
-//loopbar();
-
 document.body.addEventListener("transitionend", function (e) {
-    //console.log(e.target);
     if (e.target.hasClass("ytp-player-content")) {
         return false;
     }
     addLoop();
     loopbar();
 });
-
-/*
-var observer = new MutationObserver(function (mutations) {
-    mutations.forEach(function (mutation) {
-        if (mutation.attributeName == "src") {
-            addLoop();
-            loopbar();
-        }
-    });
 });
-observer.observe(document.querySelector("#movie_player").querySelector("video"), {attributes: true});
-*/
