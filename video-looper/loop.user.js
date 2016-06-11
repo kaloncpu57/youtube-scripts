@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Loop
 // @namespace    kaloncpu57
-// @version      0.8.8
+// @version      0.8.9
 // @updateURL    https://kaloncpu57.github.io/youtube-scripts/video-looper/loop.user.js
 // @description  Adds a loop option to the YouTube HTML5 player settings
 // @author       kaloncpu57
@@ -99,7 +99,7 @@ function createMenuItem(opt) {
             }
           });
         }
-        document.querySelector("#ytp-main-menu-id").appendChild(menuitem);
+        document.querySelector("#movie_player").querySelector(".ytp-panel-menu").appendChild(menuitem);
     }
 }
 
